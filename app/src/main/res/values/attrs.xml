@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="customAttrs">
+        <attr name="actionSearchIcon" format="reference" />
+        <attr name="actionAcceptIcon" format="reference" />
+        <attr name="actionRefreshIcon" format="reference" />
+        <attr name="groupIndicatorIcon" format="reference" />
+    </declare-styleable>
+</resources>

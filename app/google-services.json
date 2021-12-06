@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "830748370893",
+    "project_id": "shopping-list-app-ios6",
+    "storage_bucket": "shopping-list-app-ios6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830748370893:android:a57c9f497ee160e0bc4684",
+        "android_client_info": {
+          "package_name": "pt.atp.shoppinglist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "830748370893-vsrketl2itdbcl6umvdqaded4muoskq8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pt.atp.shoppinglist",
+            "certificate_hash": "83dfbc772767fc6cd99bc86e2498ef811e942388"
+          }
+        },
+        {
+          "client_id": "830748370893-ehloetd18lu3iq2q1vhfc4lv172da0q1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_oeg4rKfmoPyqBaAgQZA2r1YuNYw_vj0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "830748370893-ehloetd18lu3iq2q1vhfc4lv172da0q1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
