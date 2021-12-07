@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import pt.atp.shoppinglist.R
 
-class ItemsAdapter(private val context: Activity, private val item: Array<String>, private val quantity: Array<String>)
+class CatalogAdapter(private val context: Activity, private val item: Array<String>)
     : ArrayAdapter<String>(context, R.layout.layout_list, item) {
 
     @SuppressLint("ViewHolder", "InflateParams", "SetTextI18n")
@@ -19,11 +19,9 @@ class ItemsAdapter(private val context: Activity, private val item: Array<String
 
         val imageView = rowView.findViewById(R.id.iconList) as ImageView
         val itemText = rowView.findViewById(R.id.itemList) as TextView
-        val quantityText = rowView.findViewById(R.id.quantityList) as TextView
 
         imageView.setImageResource(R.drawable.logo_white)
         itemText.text = item[position]
-        quantityText.text = quantity[position]
 
         return rowView
     }

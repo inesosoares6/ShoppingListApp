@@ -41,7 +41,6 @@ class ActivityRegister : AppCompatActivity() {
             "familyId" to familyId,
             "email" to email
         )
-
         // Add a new document with a generated ID
         db.collection("users").document(email)
             .set(user)
@@ -53,6 +52,7 @@ class ActivityRegister : AppCompatActivity() {
             .addOnFailureListener {
                 Toast.makeText(applicationContext, getString(R.string.failRegister), Toast.LENGTH_LONG).show()
             }
+
     }
 
     private fun registerNewUser() {

@@ -2,10 +2,13 @@ package pt.atp.shoppinglist
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.DialogInterface
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -13,70 +16,43 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import pt.atp.warmupapp.models.ItemsAdapter
+import pt.atp.shoppinglist.models.CatalogAdapter
 
-class FragmentCatalog  : Fragment(R.layout.fragment_list) {
+class FragmentCatalog  : Fragment(R.layout.fragment_catalog) {
 
     private val db = FirebaseFirestore.getInstance()
     private var mAuth: FirebaseAuth? = null
     private val arrayDocs: ArrayList<String> = ArrayList()
-    private val arrayTime: ArrayList<String> = ArrayList()
-    private val arrayType: ArrayList<String> = ArrayList()
-    private val arrayName: ArrayList<String> = ArrayList()
-    private val arrayExercises: ArrayList<String> = ArrayList()
-    private var numWarmUps = 0
+    private val arrayItem: ArrayList<String> = ArrayList()
+    private var familyId: String = String()
+    private val m_Text = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
-        val rootView: View = inflater.inflate(R.layout.fragment_list,container,false)
-        val newButton: FloatingActionButton = rootView.findViewById(R.id.newButton)
+        val rootView: View = inflater.inflate(R.layout.fragment_catalog, container, false)
+        val newButton: FloatingActionButton = rootView.findViewById(R.id.newButtonCatalog)
         mAuth= FirebaseAuth.getInstance()
-
-        arrayDocs.clear()
-        arrayName.clear()
-        arrayType.clear()
-        arrayTime.clear()
-        arrayExercises.clear()
-
-        mAuth!!.currentUser?.email?.let {
-            db.collection("users").document(it).collection("warm-ups").get()
-                .addOnSuccessListener { result ->
-                    for(document in result){
-                        arrayDocs.add(document.id)
-                        arrayName.add(document["name"].toString())
-                        arrayType.add(document["type"].toString())
-                        arrayTime.add(document["time"].toString())
-                        arrayExercises.add(document["exercises"].toString())
-                    }
-                    when (arrayDocs.size) {
-                        0 -> {
-                            Toast.makeText(context,getString(R.string.add_new_item), Toast.LENGTH_LONG).show()
-                        }
-                        else -> {
-                            sendData(rootView, arrayName, arrayType, arrayTime)
-                        }
-                    }
-                }
-                .addOnFailureListener {
-                    Toast.makeText(context,getString(R.string.error_getting_documents), Toast.LENGTH_LONG).show()
-                }
-        }
 
         mAuth!!.currentUser?.email?.let {
             db.collection("users").document(it).get()
-                .addOnSuccessListener { result ->
-                    numWarmUps=result["numWarmUps"].toString().toInt()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(context, getString(R.string.error_getting_numItems), Toast.LENGTH_LONG).show()
-                }
+                    .addOnSuccessListener { result ->
+                        familyId = result["familyId"].toString()
+                        getCatalog(rootView)
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(context, getString(R.string.error_name), Toast.LENGTH_LONG).show()
+                    }
+        }
+
+        newButton.setOnClickListener {
+            showDialogNewItem()
         }
 
         return rootView
     }
 
-    private fun sendData(rootView: View, arrayName: ArrayList<String>, arrayType: ArrayList<String>, arrayTime: ArrayList<String>) {
-        val myListAdapter = ItemsAdapter(context as Activity, arrayName.toTypedArray(), arrayType.toTypedArray(), arrayTime.toTypedArray())
+    private fun sendData(rootView: View, arrayItem: ArrayList<String>) {
+        val myListAdapter = CatalogAdapter(context as Activity, arrayItem.toTypedArray())
         val listView: ListView = rootView.findViewById(R.id.listViewCatalog)
         listView.adapter = myListAdapter
 
@@ -86,8 +62,8 @@ class FragmentCatalog  : Fragment(R.layout.fragment_list) {
             val dialogBuilder = AlertDialog.Builder(context as Activity)
             dialogBuilder.setMessage(getString(R.string.performAction))
                 .setCancelable(false)
-                .setPositiveButton(getString(R.string.favorite)) { _, _ ->
-                    setAsFavorite(itemIdAtPos.toInt())
+                .setPositiveButton(getString(R.string.add_to_list)) { _, _ ->
+                    showDialogQuantity(itemIdAtPos.toInt())
                 }
                 .setNegativeButton(getString(R.string.deleteFromList)) { _, _ ->
                     deleteFromList(itemIdAtPos.toInt())
@@ -96,38 +72,100 @@ class FragmentCatalog  : Fragment(R.layout.fragment_list) {
                     dialog.cancel()
                 }
             val alert = dialogBuilder.create()
-            alert.setTitle(getString(R.string.item) + " #" + (itemIdAtPos+1))
+            alert.setTitle(getString(R.string.item) + " #" + (itemIdAtPos + 1))
             alert.show()
         }
     }
 
     private fun deleteFromList(idList: Int) {
-        mAuth?.currentUser?.email?.let {
-            db.collection("users").document(it).collection("warm-ups").document(arrayDocs[idList]).delete()
-            Toast.makeText(context, getString(R.string.item_deleted_successful), Toast.LENGTH_LONG).show()
-        }
-        mAuth?.currentUser?.email?.let {
-            db.collection("users").document(it).update(mapOf("numWarmUps" to (numWarmUps-1)))
-        }
+        db.collection("family-IDs").document(familyId).collection("catalog").document(arrayDocs[idList]).delete()
+        Toast.makeText(context, getString(R.string.item_deleted_successful), Toast.LENGTH_LONG).show()
     }
 
     @SuppressLint("ResourceType")
-    private fun setAsFavorite(idList: Int) {
-        val favWarmUp = hashMapOf(
-            "name" to arrayName[idList],
-            "type" to arrayType[idList],
-            "time" to arrayTime[idList],
-            "exercises" to arrayExercises[idList]
+    private fun addToList(idList: Int, quantity: String) {
+        val newItemList = hashMapOf(
+                "item" to arrayItem[idList],
+                "quantity" to quantity
         )
-        mAuth?.currentUser?.email?.let {
-            db.collection("users").document(it).collection("default").document("warm-up").set(favWarmUp)
+        db.collection("familyIDs").document(familyId).collection("list").document().set(newItemList)
+            .addOnSuccessListener {
+                Toast.makeText(context, activity?.getString(R.string.item_addition_successful), Toast.LENGTH_LONG).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(context, activity?.getString(R.string.error_adding_item), Toast.LENGTH_LONG).show()
+            }
+        }
+
+    private fun addToCatalog(item: String) {
+        val newItemCatalog = hashMapOf(
+                "item" to item,
+                "quantity" to 0
+        )
+        db.collection("familyIDs").document(familyId).collection("catalog").document().set(newItemCatalog)
                 .addOnSuccessListener {
-//                        Toast.makeText(context, activity?.getString(R.string.warm_up_addition_successful), Toast.LENGTH_LONG).show()
-//                    activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.flFragment,FragmentList())?.commit()
+                    Toast.makeText(context, activity?.getString(R.string.item_addition_successful), Toast.LENGTH_LONG).show()
                 }
                 .addOnFailureListener {
                     Toast.makeText(context, activity?.getString(R.string.error_adding_item), Toast.LENGTH_LONG).show()
                 }
+    }
+
+    private fun getCatalog(rootView: View){
+        arrayDocs.clear()
+        arrayItem.clear()
+
+        db.collection("familyIDs").document(familyId).collection("catalog").get()
+                .addOnSuccessListener { result ->
+                    for(document in result){
+                        arrayDocs.add(document.id)
+                        arrayItem.add(document["item"].toString())
+                    }
+                    when (arrayItem.size) {
+                        0 -> {
+                            Toast.makeText(context, getString(R.string.add_new_item), Toast.LENGTH_LONG).show()
+                        }
+                        else -> {
+                            sendData(rootView, arrayItem)
+                        }
+                    }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(context, getString(R.string.error_getting_documents), Toast.LENGTH_LONG).show()
+                }
+    }
+
+    private fun showDialogNewItem(){
+        val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(context)
+        builder.setTitle("Adding new item to catalog")
+
+        val input = EditText(context)
+        input.hint = "Item"
+        input.inputType = InputType.TYPE_CLASS_TEXT
+        builder.setView(input)
+
+        builder.setPositiveButton("OK") { _, _ ->
+            addToCatalog(input.text.toString())
         }
+        builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
+
+        builder.show()
+    }
+
+    private fun showDialogQuantity(idList: Int){
+        val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(context)
+        builder.setTitle("Quantity")
+
+        val input = EditText(context)
+        input.hint = ""
+        input.inputType = InputType.TYPE_CLASS_TEXT
+        builder.setView(input)
+
+        builder.setPositiveButton("OK") { _, _ ->
+            addToList(idList, input.text.toString())
+        }
+        builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
+
+        builder.show()
     }
 }

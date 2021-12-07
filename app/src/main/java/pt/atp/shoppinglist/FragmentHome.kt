@@ -21,12 +21,11 @@ class FragmentHome : Fragment(R.layout.fragment_home) {
         val familyNameText: TextView = rootView.findViewById(R.id.family)
         mAuth= FirebaseAuth.getInstance()
 
-        var userName : String
         mAuth!!.currentUser?.email?.let {
             db.collection("users").document(it).get()
                 .addOnSuccessListener { result ->
                     userNameText.text = result["name"].toString()
-                    familyNameText.text = result["family"].toString()
+                    familyNameText.text = result["familyId"].toString()
                 }
                 .addOnFailureListener {
                     Toast.makeText(context,getString(R.string.error_name), Toast.LENGTH_LONG).show()
