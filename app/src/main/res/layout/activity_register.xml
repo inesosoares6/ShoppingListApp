@@ -46,7 +46,7 @@
     <EditText
         android:id="@+id/family_id"
         android:inputType="text"
-        android:hint="@string/family_id"
+        android:hint="@string/list_id"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"

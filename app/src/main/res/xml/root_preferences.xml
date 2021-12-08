@@ -11,7 +11,7 @@
 
         <EditTextPreference
             app:key="familyID"
-            app:title="Change family ID" />
+            app:title="Change list ID" />
 
         <Preference
             app:title="Reset password">

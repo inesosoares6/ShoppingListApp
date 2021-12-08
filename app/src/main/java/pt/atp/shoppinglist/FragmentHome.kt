@@ -27,7 +27,7 @@ class FragmentHome : Fragment(R.layout.fragment_home) {
             db.collection("users").document(it).get()
                 .addOnSuccessListener { result ->
                     userNameText.text = result["name"].toString()
-                    familyNameText.text = "id: " + result["familyId"].toString()
+                    familyNameText.text = "List id: " + result["familyId"].toString()
                 }
                 .addOnFailureListener {
                     Toast.makeText(context,getString(R.string.error_name), Toast.LENGTH_LONG).show()
