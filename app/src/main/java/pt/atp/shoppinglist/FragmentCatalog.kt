@@ -25,7 +25,6 @@ class FragmentCatalog  : Fragment(R.layout.fragment_catalog) {
     private val arrayDocs: ArrayList<String> = ArrayList()
     private val arrayItem: ArrayList<String> = ArrayList()
     private var familyId: String = String()
-    private val m_Text = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
@@ -45,7 +44,7 @@ class FragmentCatalog  : Fragment(R.layout.fragment_catalog) {
         }
 
         newButton.setOnClickListener {
-            showDialogNewItem()
+            showDialogNewItem(rootView)
         }
 
         return rootView
@@ -63,10 +62,10 @@ class FragmentCatalog  : Fragment(R.layout.fragment_catalog) {
             dialogBuilder.setMessage(getString(R.string.performAction))
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.add_to_list)) { _, _ ->
-                    showDialogQuantity(itemIdAtPos.toInt())
+                    showDialogQuantity(rootView, itemIdAtPos.toInt())
                 }
                 .setNegativeButton(getString(R.string.deleteFromList)) { _, _ ->
-                    deleteFromList(itemIdAtPos.toInt())
+                    deleteFromCatalog(rootView, itemIdAtPos.toInt())
                 }
                 .setNeutralButton(getString(R.string.cancelElimination)) { dialog, _ ->
                     dialog.cancel()
@@ -77,38 +76,33 @@ class FragmentCatalog  : Fragment(R.layout.fragment_catalog) {
         }
     }
 
-    private fun deleteFromList(idList: Int) {
-        db.collection("family-IDs").document(familyId).collection("catalog").document(arrayDocs[idList]).delete()
-        Toast.makeText(context, getString(R.string.item_deleted_successful), Toast.LENGTH_LONG).show()
+    private fun deleteFromCatalog(rootView: View, idList: Int) {
+        db.collection("familyIDs").document(familyId).collection("catalog").document(arrayDocs[idList]).delete()
+        getCatalog(rootView)
     }
 
     @SuppressLint("ResourceType")
-    private fun addToList(idList: Int, quantity: String) {
+    private fun addToList(rootView: View, idList: Int, quantity: String) {
         val newItemList = hashMapOf(
                 "item" to arrayItem[idList],
                 "quantity" to quantity
         )
         db.collection("familyIDs").document(familyId).collection("list").document().set(newItemList)
             .addOnSuccessListener {
-                Toast.makeText(context, activity?.getString(R.string.item_addition_successful), Toast.LENGTH_LONG).show()
+                deleteFromCatalog(rootView, idList)
             }
             .addOnFailureListener {
                 Toast.makeText(context, activity?.getString(R.string.error_adding_item), Toast.LENGTH_LONG).show()
             }
         }
 
-    private fun addToCatalog(item: String) {
+    private fun addToCatalog(rootView: View, item: String) {
         val newItemCatalog = hashMapOf(
                 "item" to item,
                 "quantity" to 0
         )
         db.collection("familyIDs").document(familyId).collection("catalog").document().set(newItemCatalog)
-                .addOnSuccessListener {
-                    Toast.makeText(context, activity?.getString(R.string.item_addition_successful), Toast.LENGTH_LONG).show()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(context, activity?.getString(R.string.error_adding_item), Toast.LENGTH_LONG).show()
-                }
+        getCatalog(rootView)
     }
 
     private fun getCatalog(rootView: View){
@@ -121,7 +115,7 @@ class FragmentCatalog  : Fragment(R.layout.fragment_catalog) {
                         arrayDocs.add(document.id)
                         arrayItem.add(document["item"].toString())
                     }
-                    when (arrayItem.size) {
+                    when (arrayDocs.size) {
                         0 -> {
                             Toast.makeText(context, getString(R.string.add_new_item), Toast.LENGTH_LONG).show()
                         }
@@ -135,7 +129,7 @@ class FragmentCatalog  : Fragment(R.layout.fragment_catalog) {
                 }
     }
 
-    private fun showDialogNewItem(){
+    private fun showDialogNewItem(rootView: View){
         val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(context)
         builder.setTitle("Adding new item to catalog")
 
@@ -145,14 +139,13 @@ class FragmentCatalog  : Fragment(R.layout.fragment_catalog) {
         builder.setView(input)
 
         builder.setPositiveButton("OK") { _, _ ->
-            addToCatalog(input.text.toString())
+            addToCatalog(rootView, input.text.toString())
         }
         builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
-
         builder.show()
     }
 
-    private fun showDialogQuantity(idList: Int){
+    private fun showDialogQuantity(rootView: View, idList: Int){
         val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(context)
         builder.setTitle("Quantity")
 
@@ -162,10 +155,9 @@ class FragmentCatalog  : Fragment(R.layout.fragment_catalog) {
         builder.setView(input)
 
         builder.setPositiveButton("OK") { _, _ ->
-            addToList(idList, input.text.toString())
+            addToList(rootView, idList, input.text.toString())
         }
         builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
-
         builder.show()
     }
 }

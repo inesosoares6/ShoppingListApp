@@ -1,6 +1,5 @@
 package pt.atp.shoppinglist
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -49,13 +47,13 @@ class FragmentList : Fragment(R.layout.fragment_list) {
 
         listView.setOnItemClickListener { adapterView, _, position, _ ->
             val itemIdAtPos = adapterView.getItemIdAtPosition(position)
-            deleteFromList(itemIdAtPos.toInt())
+            deleteFromList(rootView, itemIdAtPos.toInt())
         }
     }
 
-    private fun deleteFromList(idList: Int) {
+    private fun deleteFromList(rootView: View, idList: Int) {
         db.collection("familyIDs").document(familyId).collection("list").document(arrayDocs[idList]).delete()
-        Toast.makeText(context, getString(R.string.item_deleted_successful), Toast.LENGTH_LONG).show()
+        addToCatalog(rootView, arrayItem[idList])
     }
 
     private fun getList(rootView: View){
@@ -70,7 +68,7 @@ class FragmentList : Fragment(R.layout.fragment_list) {
                         arrayItem.add(document["item"].toString())
                         arrayQuantity.add(document["quantity"].toString())
                     }
-                    when (arrayItem.size) {
+                    when (arrayDocs.size) {
                         0 -> {
                             Toast.makeText(context,getString(R.string.add_new_item), Toast.LENGTH_LONG).show()
                         }
@@ -82,5 +80,14 @@ class FragmentList : Fragment(R.layout.fragment_list) {
                 .addOnFailureListener {
                     Toast.makeText(context,getString(R.string.error_getting_documents), Toast.LENGTH_LONG).show()
                 }
+    }
+
+    private fun addToCatalog(rootView: View, item: String) {
+        val newItemCatalog = hashMapOf(
+                "item" to item,
+                "quantity" to 0
+        )
+        db.collection("familyIDs").document(familyId).collection("catalog").document().set(newItemCatalog)
+        getList(rootView)
     }
 }

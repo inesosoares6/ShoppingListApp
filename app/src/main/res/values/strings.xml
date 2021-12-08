@@ -40,7 +40,8 @@
     <string name="add_to_list">Add to list</string>
     <string name="deleteFromList">Delete from list</string>
     <string name="cancelElimination">Cancel</string>
-    <string name="item_deleted_successful">Item deleted successfully</string>
+    <string name="item_deleted_successful">Item deleted from catalog successfully</string>
+    <string name="item_removed_from_list_successful">Item removed from list successfully</string>
     <string name="add_new_item">Item list is empty. Add new item.</string>
     <string name="head">HEAD</string>
     <string name="log_out">Log Out</string>
