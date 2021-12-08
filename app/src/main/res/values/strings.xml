@@ -26,7 +26,6 @@
     <string name="reset_password">Reset Password</string>
     <string name="sent_email_recover">We have sent you instructions to reset your password</string>
     <string name="fail_email_recover">Failed to send reset email</string>
-    <string name="error_name">Error in reading name</string>
     <string name="successSignOut">Sign out successful</string>
     <string name="quantity">Quantity</string>
     <string name="item">Item</string>
@@ -46,4 +45,11 @@
     <string name="head">HEAD</string>
     <string name="log_out">Log Out</string>
     <string name="family_id">Family ID</string>
+    <string name="settings">Settings</string>
+    <string name="delete_account">Delete account</string>
+    <string name="are_you_sure_that_you_want_to_delete_your_account">Are you sure that you want to delete your account?</string>
+    <string name="no_return_to_homepage">No, return to homepage.</string>
+    <string name="yes_delete_account">Yes, delete account.</string>
+    <string name="userDeleted">User account deleted</string>
+    <string name="error_name">Error in reading name</string>
 </resources>

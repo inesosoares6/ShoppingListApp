@@ -36,6 +36,14 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".ActivityDeleteUser"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ActivitySettings"
+            android:screenOrientation="portrait" />
+
 
         <activity android:name=".ActivityLogin"
             android:screenOrientation="portrait" >
