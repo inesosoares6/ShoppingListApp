@@ -1,5 +1,6 @@
 package pt.atp.shoppinglist
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ class FragmentHome : Fragment(R.layout.fragment_home) {
     private val db = FirebaseFirestore.getInstance()
     private var mAuth: FirebaseAuth? = null
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView: View = inflater.inflate(R.layout.fragment_home,container,false)
         val userNameText: TextView = rootView.findViewById(R.id.userNameText)
@@ -25,7 +27,7 @@ class FragmentHome : Fragment(R.layout.fragment_home) {
             db.collection("users").document(it).get()
                 .addOnSuccessListener { result ->
                     userNameText.text = result["name"].toString()
-                    familyNameText.text = result["familyId"].toString()
+                    familyNameText.text = "id: " + result["familyId"].toString()
                 }
                 .addOnFailureListener {
                     Toast.makeText(context,getString(R.string.error_name), Toast.LENGTH_LONG).show()
