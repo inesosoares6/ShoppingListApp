@@ -1,5 +1,6 @@
 package pt.atp.shoppinglist
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.MenuItem
@@ -24,7 +25,8 @@ class ActivitySettings : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id: Int = item.itemId
         if(id==android.R.id.home){
-            onBackPressed()
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
             return true
         }
         return super.onOptionsItemSelected(item)
