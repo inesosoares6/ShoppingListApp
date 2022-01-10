@@ -101,7 +101,8 @@ class FragmentCatalog  : Fragment(R.layout.fragment_catalog) {
                 "item" to item,
                 "quantity" to 0
         )
-        db.collection("familyIDs").document(familyId).collection("catalog").document().set(newItemCatalog)
+        val itemID = item.replace(" ", "_").toLowerCase()
+        db.collection("familyIDs").document(familyId).collection("catalog").document(itemID).set(newItemCatalog)
         getCatalog(rootView)
     }
 
