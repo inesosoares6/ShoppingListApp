@@ -17,6 +17,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import pt.atp.shoppinglist.models.CatalogAdapter
+import java.util.*
+import kotlin.collections.ArrayList
 
 class FragmentCatalog  : Fragment(R.layout.fragment_catalog) {
 
@@ -101,7 +103,7 @@ class FragmentCatalog  : Fragment(R.layout.fragment_catalog) {
                 "item" to item,
                 "quantity" to 0
         )
-        val itemID = item.replace(" ", "_").toLowerCase()
+        val itemID = item.replace(" ", "_").toLowerCase(Locale.ROOT)
         db.collection("familyIDs").document(familyId).collection("catalog").document(itemID).set(newItemCatalog)
         getCatalog(rootView)
     }
