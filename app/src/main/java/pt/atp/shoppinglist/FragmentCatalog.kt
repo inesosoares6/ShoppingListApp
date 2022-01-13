@@ -61,7 +61,7 @@ class FragmentCatalog  : Fragment(R.layout.fragment_catalog) {
             val itemIdAtPos = adapterView.getItemIdAtPosition(position)
 
             val dialogBuilder = AlertDialog.Builder(context as Activity)
-            dialogBuilder.setMessage(getString(R.string.performAction))
+            dialogBuilder
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.add_to_list)) { _, _ ->
                     showDialogQuantity(rootView, itemIdAtPos.toInt())
@@ -73,7 +73,7 @@ class FragmentCatalog  : Fragment(R.layout.fragment_catalog) {
                     dialog.cancel()
                 }
             val alert = dialogBuilder.create()
-            alert.setTitle(getString(R.string.item) + " #" + (itemIdAtPos + 1))
+            alert.setTitle(arrayItem[itemIdAtPos.toInt()])
             alert.show()
         }
     }
@@ -89,7 +89,8 @@ class FragmentCatalog  : Fragment(R.layout.fragment_catalog) {
                 "item" to arrayItem[idList],
                 "quantity" to quantity
         )
-        db.collection("familyIDs").document(familyId).collection("list").document().set(newItemList)
+        val itemID = arrayItem[idList].replace(" ", "_").toLowerCase(Locale.ROOT)
+        db.collection("familyIDs").document(familyId).collection("list").document(itemID).set(newItemList)
             .addOnSuccessListener {
                 deleteFromCatalog(rootView, idList)
             }

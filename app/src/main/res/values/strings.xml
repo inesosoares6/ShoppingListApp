@@ -37,7 +37,7 @@
     <string name="error_getting_documents">Error getting documents</string>
     <string name="performAction">What action do you want to perform with this Item?</string>
     <string name="add_to_list">Add to list</string>
-    <string name="deleteFromList">Delete from list</string>
+    <string name="deleteFromList">Delete</string>
     <string name="cancelElimination">Cancel</string>
     <string name="item_deleted_successful">Item deleted from catalog successfully</string>
     <string name="item_removed_from_list_successful">Item removed from list successfully</string>

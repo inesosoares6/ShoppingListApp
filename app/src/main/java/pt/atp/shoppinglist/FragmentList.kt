@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import pt.atp.shoppinglist.models.ItemsAdapter
+import java.util.*
+import kotlin.collections.ArrayList
 
 class FragmentList : Fragment(R.layout.fragment_list) {
 
@@ -87,7 +89,8 @@ class FragmentList : Fragment(R.layout.fragment_list) {
                 "item" to item,
                 "quantity" to 0
         )
-        db.collection("familyIDs").document(familyId).collection("catalog").document().set(newItemCatalog)
+        val itemID = item.replace(" ", "_").toLowerCase(Locale.ROOT)
+        db.collection("familyIDs").document(familyId).collection("catalog").document(itemID).set(newItemCatalog)
         getList(rootView)
     }
 }
