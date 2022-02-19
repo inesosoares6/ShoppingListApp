@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.MenuItem
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -46,9 +47,15 @@ class ActivitySettings : AppCompatActivity() {
                 showDialogChangeUsername()
             }
 
-            val changeList: Preference? = findPreference("listID")
-            changeList?.setOnPreferenceClickListener {
+            val newList: Preference? = findPreference("newList")
+            newList?.setOnPreferenceClickListener {
                 showDialogCreateList()
+            }
+
+            val deleteList: Preference? = findPreference("deleteList")
+            deleteList?.setOnPreferenceClickListener {
+                Toast.makeText(context, "TODO", Toast.LENGTH_LONG).show()
+                showDialogDeleteList()
             }
 
         }
@@ -98,6 +105,12 @@ class ActivitySettings : AppCompatActivity() {
             }
             builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
             builder.show()
+
+            return true
+        }
+
+        private fun showDialogDeleteList(): Boolean  {
+
 
             return true
         }
