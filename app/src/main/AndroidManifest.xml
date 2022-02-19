@@ -26,28 +26,30 @@
 
         <activity
             android:name=".ActivityRegister"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
 
         <activity
             android:name=".ActivityResetPassword"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
 
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
 
         <activity
             android:name=".ActivityDeleteUser"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
 
         <activity
             android:name=".ActivitySettings"
             android:label="@string/settings"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
 
 
         <activity android:name=".ActivityLogin"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="fullSensor"
+            android:exported="true"
+            tools:node="merge" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

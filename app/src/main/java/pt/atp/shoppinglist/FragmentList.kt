@@ -1,13 +1,18 @@
 package pt.atp.shoppinglist
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import pt.atp.shoppinglist.models.ItemsAdapter
@@ -26,6 +31,7 @@ class FragmentList : Fragment(R.layout.fragment_list) {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         val rootView: View = inflater.inflate(R.layout.fragment_list,container,false)
+        val copyButton: FloatingActionButton = rootView.findViewById(R.id.copyList)
         mAuth= FirebaseAuth.getInstance()
 
         mAuth!!.currentUser?.email?.let {
@@ -37,6 +43,10 @@ class FragmentList : Fragment(R.layout.fragment_list) {
                     .addOnFailureListener {
                         Toast.makeText(context,getString(R.string.error_name), Toast.LENGTH_LONG).show()
                     }
+        }
+
+        copyButton.setOnClickListener {
+            createListString()
         }
 
         return rootView
@@ -92,5 +102,22 @@ class FragmentList : Fragment(R.layout.fragment_list) {
         val itemID = item.replace(" ", "_").toLowerCase(Locale.ROOT)
         db.collection("familyIDs").document(familyId).collection("catalog").document(itemID).set(newItemCatalog)
         getList(rootView)
+    }
+
+    private fun createListString(){
+        var message = "Shopping List\n"
+        var i = 0
+        for (item in arrayItem){
+            message = message + " - " + item + ": " + arrayQuantity[i] + "\n"
+            i += 1
+        }
+        copyTextToClipboard(message)
+    }
+
+    private fun copyTextToClipboard(listText: String) {
+        val clipboardManager = activity?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipData = ClipData.newPlainText("text", listText)
+        clipboardManager.setPrimaryClip(clipData)
+        Toast.makeText(context, "List copied to clipboard", Toast.LENGTH_LONG).show()
     }
 }
