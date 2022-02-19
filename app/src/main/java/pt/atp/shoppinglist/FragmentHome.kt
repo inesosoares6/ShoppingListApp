@@ -1,6 +1,7 @@
 package pt.atp.shoppinglist
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,13 +16,17 @@ class FragmentHome : Fragment(R.layout.fragment_home) {
     private val db = FirebaseFirestore.getInstance()
     private var mAuth: FirebaseAuth? = null
     private val arrayDocs: ArrayList<String> = ArrayList()
+    private var listId: String = String()
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val rootView: View = inflater.inflate(R.layout.fragment_home,container,false)
-        val userNameText: TextView = rootView.findViewById(R.id.userNameText)
-        val familyNameText: TextView = rootView.findViewById(R.id.family)
+        val usernameText: TextView = rootView.findViewById(R.id.usernameText)
+        val listText: TextView = rootView.findViewById(R.id.list)
         mAuth= FirebaseAuth.getInstance()
+
+        getCurrentID(usernameText, listText)
+
 
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, getListIds())
         val autocompleteTV: AutoCompleteTextView = rootView.findViewById(R.id.autoCompleteTextView)
@@ -29,20 +34,26 @@ class FragmentHome : Fragment(R.layout.fragment_home) {
         autocompleteTV.setOnItemClickListener { adapterView, _, position, _ ->
             val itemIdAtPos = adapterView.getItemIdAtPosition(position)
             changeList(itemIdAtPos.toInt())
+            startActivity(Intent(context,MainActivity::class.java))
         }
 
+        return rootView
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun getCurrentID(usernameText: TextView, listText: TextView) {
         mAuth!!.currentUser?.email?.let {
             db.collection("users").document(it).get()
                 .addOnSuccessListener { result ->
-                    userNameText.text = result["name"].toString()
-                    familyNameText.text = "List: " + result["familyId"].toString()
+                    usernameText.text = result["name"].toString()
+                    listId = result["familyId"].toString()
+                    listText.text = "List: $listId"
                 }
                 .addOnFailureListener {
                     Toast.makeText(context,getString(R.string.error_name), Toast.LENGTH_LONG).show()
                 }
         }
 
-        return rootView
     }
 
     private fun changeList(itemIdAtPos: Int) {

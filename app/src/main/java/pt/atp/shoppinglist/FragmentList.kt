@@ -84,8 +84,7 @@ class FragmentList : Fragment(R.layout.fragment_list) {
                     when (arrayDocs.size) {
                         0 -> {
                             Toast.makeText(context,getString(R.string.add_new_item), Toast.LENGTH_LONG).show()
-                            val intent = Intent(context,MainActivity::class.java)
-                            startActivity(intent)
+                            startActivity(Intent(context,MainActivity::class.java))
                         }
                         else -> {
                             sendData(rootView, arrayItem, arrayQuantity)
