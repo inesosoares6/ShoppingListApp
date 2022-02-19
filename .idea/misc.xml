@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/ineso/AndroidStudioProjects/ShoppingList/app/src/main/res/drawable/ic_copy.xml" value="0.14" />
+        <entry key="..\:/Users/ineso/AndroidStudioProjects/ShoppingList/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/ineso/AndroidStudioProjects/ShoppingList/app/src/main/res/layout/activity_settings.xml" value="0.10597826086956522" />
         <entry key="..\:/Users/ineso/AndroidStudioProjects/ShoppingList/app/src/main/res/layout/dropdown_item.xml" value="0.17552083333333332" />
         <entry key="..\:/Users/ineso/AndroidStudioProjects/ShoppingList/app/src/main/res/layout/fragment_catalog.xml" value="0.10597826086956522" />
@@ -11,6 +12,7 @@
         <entry key="..\:/Users/ineso/AndroidStudioProjects/ShoppingList/app/src/main/res/layout/fragment_list.xml" value="0.10597826086956522" />
         <entry key="..\:/Users/ineso/AndroidStudioProjects/ShoppingList/app/src/main/res/layout/layout_catalog.xml" value="0.10597826086956522" />
         <entry key="..\:/Users/ineso/AndroidStudioProjects/ShoppingList/app/src/main/res/layout/layout_list.xml" value="0.10597826086956522" />
+        <entry key="..\:/Users/ineso/AndroidStudioProjects/ShoppingList/app/src/main/res/menu/bottom_nav_menu.xml" value="0.10462962962962963" />
         <entry key="..\:/Users/ineso/AndroidStudioProjects/ShoppingList/app/src/main/res/xml/root_preferences.xml" value="0.10597826086956522" />
       </map>
     </option>
