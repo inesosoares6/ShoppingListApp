@@ -24,7 +24,12 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when(it.itemId){
-                R.id.home->setCurrentFragment(homeFragment)
+                R.id.home->{
+                    setCurrentFragment(homeFragment)
+                    finish()
+                    val intent = Intent(applicationContext,MainActivity::class.java)
+                    startActivity(intent)
+                }
                 R.id.list->setCurrentFragment(listFragment)
                 R.id.catalog->setCurrentFragment(catalogFragment)
             }

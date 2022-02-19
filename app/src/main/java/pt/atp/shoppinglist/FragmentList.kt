@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -83,6 +84,8 @@ class FragmentList : Fragment(R.layout.fragment_list) {
                     when (arrayDocs.size) {
                         0 -> {
                             Toast.makeText(context,getString(R.string.add_new_item), Toast.LENGTH_LONG).show()
+                            val intent = Intent(context,MainActivity::class.java)
+                            startActivity(intent)
                         }
                         else -> {
                             sendData(rootView, arrayItem, arrayQuantity)
@@ -99,7 +102,7 @@ class FragmentList : Fragment(R.layout.fragment_list) {
                 "item" to item,
                 "quantity" to 0
         )
-        val itemID = item.replace(" ", "_").toLowerCase(Locale.ROOT)
+        val itemID = item.replace(" ", "_").lowercase(Locale.ROOT)
         db.collection("familyIDs").document(familyId).collection("catalog").document(itemID).set(newItemCatalog)
         getList(rootView)
     }

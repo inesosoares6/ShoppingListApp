@@ -5,13 +5,13 @@
     <PreferenceCategory
         app:title="Account">
 
-        <EditTextPreference
+        <Preference
+            app:key="listID"
+            app:title="Create new list" />
+
+        <Preference
             app:key="username"
             app:title="Change username" />
-
-        <EditTextPreference
-            app:key="familyID"
-            app:title="Change list ID" />
 
         <Preference
             app:title="Reset password">

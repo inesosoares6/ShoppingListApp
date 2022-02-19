@@ -2,7 +2,6 @@ package pt.atp.shoppinglist
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.DialogInterface
 import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
@@ -89,7 +88,7 @@ class FragmentCatalog  : Fragment(R.layout.fragment_catalog) {
                 "item" to arrayItem[idList],
                 "quantity" to quantity
         )
-        val itemID = arrayItem[idList].replace(" ", "_").toLowerCase(Locale.ROOT)
+        val itemID = arrayItem[idList].replace(" ", "_").lowercase(Locale.ROOT)
         db.collection("familyIDs").document(familyId).collection("list").document(itemID).set(newItemList)
             .addOnSuccessListener {
                 deleteFromCatalog(rootView, idList)
@@ -104,7 +103,7 @@ class FragmentCatalog  : Fragment(R.layout.fragment_catalog) {
                 "item" to item,
                 "quantity" to 0
         )
-        val itemID = item.replace(" ", "_").toLowerCase(Locale.ROOT)
+        val itemID = item.replace(" ", "_").lowercase(Locale.ROOT)
         db.collection("familyIDs").document(familyId).collection("catalog").document(itemID).set(newItemCatalog)
         getCatalog(rootView)
     }
